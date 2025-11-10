@@ -16,7 +16,7 @@ public:
 	// Sets default values for this component's properties
 	UUWaypointMovementComponent();
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Waypoint_Component", meta = (MakeEditWidget))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Waypoint_Component", meta = (MakeEditWidget = true))
 	TArray<FTransform> Waypoints;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Waypoint_Component")

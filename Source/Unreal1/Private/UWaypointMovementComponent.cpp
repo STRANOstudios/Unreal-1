@@ -115,35 +115,35 @@ void UUWaypointMovementComponent::PostEditChangeProperty(FPropertyChangedEvent& 
 
 void UUWaypointMovementComponent::DrawEditorGizmos() const
 {
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-#if WITH_EDITOR
-	if (World->WorldType != EWorldType::Editor) return; // solo in editor, non in PIE
-#endif
-
-	// Pulisci i vecchi disegni persistenti di questo world
-	FlushPersistentDebugLines(World);
-
-	// Se i Waypoint sono RELATIVI al Root, trasformali in world
-	const USceneComponent* Root = GetOwner() ? GetOwner()->GetRootComponent() : nullptr;
-	const FTransform RootTf = Root ? Root->GetComponentTransform() : FTransform::Identity;
-
-	for (int32 i = 0; i < Waypoints.Num(); ++i)
-	{
-		const FTransform WpTfWorld = RootTf * Waypoints[i];
-		const FVector P = WpTfWorld.GetLocation();
-
-		DrawDebugSphere(World, P, 25.f, 12, FColor::Yellow,
-			/*bPersistentLines=*/true, /*LifeTime=*/0.f, /*DepthPriority=*/0, /*Thickness=*/1.5f);
-
-		if (i + 1 < Waypoints.Num())
-		{
-			const FVector Q = (RootTf * Waypoints[i + 1]).GetLocation();
-			DrawDebugLine(World, P, Q, FColor::Green,
-				/*bPersistentLines=*/true, /*LifeTime=*/0.f, /*DepthPriority=*/0, /*Thickness=*/2.f);
-		}
-	}
+//	UWorld* World = GetWorld();
+//	if (!World) return;
+//
+//#if WITH_EDITOR
+//	if (World->WorldType != EWorldType::Editor) return; // solo in editor, non in PIE
+//#endif
+//
+//	// Pulisci i vecchi disegni persistenti di questo world
+//	FlushPersistentDebugLines(World);
+//
+//	// Se i Waypoint sono RELATIVI al Root, trasformali in world
+//	const USceneComponent* Root = GetOwner() ? GetOwner()->GetRootComponent() : nullptr;
+//	const FTransform RootTf = Root ? Root->GetComponentTransform() : FTransform::Identity;
+//
+//	for (int32 i = 0; i < Waypoints.Num(); ++i)
+//	{
+//		const FTransform WpTfWorld = RootTf * Waypoints[i];
+//		const FVector P = WpTfWorld.GetLocation();
+//
+//		DrawDebugSphere(World, P, 25.f, 12, FColor::Yellow,
+//			/*bPersistentLines=*/true, /*LifeTime=*/0.f, /*DepthPriority=*/0, /*Thickness=*/1.5f);
+//
+//		if (i + 1 < Waypoints.Num())
+//		{
+//			const FVector Q = (RootTf * Waypoints[i + 1]).GetLocation();
+//			DrawDebugLine(World, P, Q, FColor::Green,
+//				/*bPersistentLines=*/true, /*LifeTime=*/0.f, /*DepthPriority=*/0, /*Thickness=*/2.f);
+//		}
+//	}
 }
 
 #pragma endregion
