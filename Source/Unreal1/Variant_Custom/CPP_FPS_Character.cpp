@@ -45,7 +45,51 @@ void ACPP_FPS_Character::BeginPlay()
 
 	//DrawDebugSphere(GetWorld(), GetActorLocation(), 100.f, 12, FColor::Blue, false, 5.f, (uint8)0U, 10.f);
 	
-	
+	if(IsValid(InteractionComponent))
+	{
+		UE_LOG(LogTemp, Display, TEXT("IS VALID"));
+	}
+
+	//SETUP CALL BACK PICK UPS
+
+	//BIND
+	for (ACPP_PickUp* Target : PickUps)
+	{
+		if(Target)
+		{	
+			// bind multicast dynamic delegate
+			Target->OnInteractMultiDynamic.AddDynamic(this, &ACPP_FPS_Character::PrintInteractable);
+
+			// bind single dynamic delegate
+			Target->OnInteractSingleDynamic.BindDynamic(this, &ACPP_FPS_Character::PrintInteractable);
+
+			// bind single delegate
+			Target->OnInteractSingle.BindUObject(this, &ACPP_FPS_Character::PrintInteractable);
+
+			// bind multicast delegate
+			Target->OnInteractMulti.AddUObject(this, &ACPP_FPS_Character::PrintInteractable);
+		}
+	}
+
+	for (ACPP_PickUp* Target : PickUps)
+	{
+		if (Target)
+		{
+			// bind multicast dynamic delegate
+			Target->OnInteractMultiDynamic.Broadcast();
+
+			// bind multicast delegate
+			Target->OnInteractMulti.Broadcast();
+			
+			// bind single delegate
+			Target->OnInteractSingle.Execute();
+			
+			// bind single dynamic delegate
+			Target->OnInteractSingleDynamic.Execute();
+			
+			
+		}
+	}	
 }
 
 // Called every frame
@@ -68,6 +112,37 @@ void ACPP_FPS_Character::OnConstruction(const FTransform& Transforms)
 
 
 }
+
+AActor* ACPP_FPS_Character::GetCompanion()
+{	
+	if(!IsValid(SpawnedCompanionActor))
+	{		
+		return nullptr;
+	}
+
+	FVector Location;
+
+	Location = SpawnedCompanionActor->GetActorLocation();
+
+	return SpawnedCompanionActor;
+}
+
+void ACPP_FPS_Character::PrintInteractable()
+{
+	if (InteractableObject.GetObject())
+	{
+		InteractableObject.GetInterface()->OptionalInteract(this);
+	}
+}
+
+void ACPP_FPS_Character::InterfaceBluprintFunction(const TScriptInterface<IInteract>& InterfacInput, TScriptInterface<IInteract>& InterfaceOutput)
+{
+	
+}
+
+
+
+
 
 
 
